@@ -202,15 +202,17 @@ function Noodle () {
       this.set('ver')
     } else if (e.key === '6') {
       this.set('dot')
+    } else if (e.key === '7') {
+      this.set('line')
     } else if (e.key === '0') {
       this.set('drag')
     } else if (e.key === 'i') {
       this.invert()
     } else if (e.key === 'x') {
       this.flip()
-    } else if (e.key === '[') {
+    } else if (e.key === '-') {
       this.size(-1)
-    } else if (e.key === ']') {
+    } else if (e.key === '+') {
       this.size(1)
     }
     this.context.fillStyle = cursor.color

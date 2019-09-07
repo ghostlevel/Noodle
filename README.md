@@ -14,14 +14,20 @@ We could not find a decent webpage to draw quick line doodles, so here's one.
 - `4` hor mode.
 - `5` ver mode.
 - `6` dot mode.
+- `7` line mode.
 - `0` drag mode.
 
 - `click` color/black.
 - `shift-click` color/white.
 - `shift-del` clear all.
 
+- `right-click` line.
+
 - `i` invert.
 - `x` flip.
+
+- `+` increase pattern size.
+- `-` decrease pattern size.
 
 ## IO
 
