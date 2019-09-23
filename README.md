@@ -17,14 +17,20 @@ We could not find a decent webpage to draw quick line doodles, so here's one.
 - `7` line mode.
 - `0` drag mode.
 
+### Controls
+
 - `click` color/black.
 - `shift-click` color/white.
 - `shift-del` clear all.
+- `arrows` move viewport.
+
+### Specials
 
 - `right-click` line.
 
 - `i` invert.
 - `x` flip.
+- `s` export.
 
 - `+` increase pattern size.
 - `-` decrease pattern size.

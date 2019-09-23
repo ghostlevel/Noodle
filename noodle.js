@@ -1,17 +1,21 @@
 'use strict'
 
-/* global cursor */
+/* global cursor MouseEvent Image */
 
 function Noodle () {
   this.el = document.createElement('canvas')
   this.context = this.el.getContext('2d')
   this.ratio = window.devicePixelRatio
+  this.offset = { x: 0, y: 0 }
 
   this.install = function (host) {
     host.appendChild(this.el)
     window.addEventListener('mousedown', this.onMouseDown, false)
     window.addEventListener('mousemove', this.onMouseMove, false)
     window.addEventListener('mouseup', this.onMouseUp, false)
+    window.addEventListener('touchstart', this.onMouseDown, {capture: false, passive: false})
+    window.addEventListener('touchmove', this.onMouseMove, {capture: false, passive: false})
+    window.addEventListener('touchend', this.onMouseUp, {capture: false, passive: false})
     window.addEventListener('keydown', this.onKeyDown, false)
     window.addEventListener('keyup', this.onKeyUp, false)
     window.addEventListener('contextmenu', this.onContext, false)
@@ -19,7 +23,6 @@ function Noodle () {
     window.addEventListener('drop', this.onDrop, false)
     window.addEventListener('paste', this.onPaste, false)
     window.addEventListener('beforeunload', this.onUnload, false)
-    this.fit()
   }
 
   this.start = function () {
@@ -28,11 +31,12 @@ function Noodle () {
     this.set('trace')
   }
 
-  this.fit = function (size = { w: window.innerWidth, h: window.innerHeight }) {
+  this.fit = function (size = { w: window.innerWidth - 30, h: window.innerHeight - 30 }) {
     this.el.width = size.w
     this.el.height = size.h
     this.el.style.width = size.w + 'px'
     this.el.style.height = size.h + 'px'
+    this.center()
   }
 
   this.fill = (color = 'white') => {
@@ -150,12 +154,24 @@ function Noodle () {
     cursor.a.y = b.y
   }
 
+  this.move = (x, y, leap = false) => {
+    this.offset.x -= x * (leap ? 100 : 50)
+    this.offset.y -= y * (leap ? 100 : 50)
+    this.el.setAttribute('style', `left:${this.offset.x}px;top:${-this.offset.y}px`)
+  }
+
+  this.center = () => {
+    this.offset.x = (window.innerWidth - this.el.width) / 2
+    this.offset.y = -(window.innerHeight - this.el.height) / 2
+    this.el.setAttribute('style', `left:${parseInt(this.offset.x) - 0.5}px;top:${-parseInt(this.offset.y) - 0.5}px`)
+  }
+
   // Events
 
   this.onMouseDown = (e) => {
     cursor.z = 1
-    cursor.a.x = e.clientX
-    cursor.a.y = e.clientY
+    cursor.a.x = (e.clientX || e.touches[0].clientX) - this.offset.x
+    cursor.a.y = (e.clientY || e.touches[0].clientY) + this.offset.y
     if (e.button > 1) {
       this.set('line')
     }
@@ -165,8 +181,8 @@ function Noodle () {
 
   this.onMouseMove = (e) => {
     if (cursor.z === 1) {
-      cursor.b.x = e.clientX
-      cursor.b.y = e.clientY
+      cursor.b.x = (e.clientX || e.touches[0].clientX) - this.offset.x
+      cursor.b.y = (e.clientY || e.touches[0].clientY) + this.offset.y
       this[cursor.mode](cursor.a, cursor.b)
     }
     e.preventDefault()
@@ -174,8 +190,8 @@ function Noodle () {
 
   this.onMouseUp = (e) => {
     cursor.z = 0
-    cursor.b.x = e.clientX
-    cursor.b.y = e.clientY
+    cursor.b.x = (e.clientX || e.changedTouches[0].clientX) - this.offset.x
+    cursor.b.y = (e.clientY || e.changedTouches[0].clientY) + this.offset.y
     this[cursor.mode](cursor.a, cursor.b)
     if (e.button > 1) {
       this.set('trace')
@@ -214,6 +230,16 @@ function Noodle () {
       this.size(-1)
     } else if (e.key === '+') {
       this.size(1)
+    } else if (e.key === 'ArrowDown') {
+      this.move(0, -1, e.shiftKey)
+    } else if (e.key === 'ArrowUp') {
+      this.move(0, 1, e.shiftKey)
+    } else if (e.key === 'ArrowRight') {
+      this.move(1, 0, e.shiftKey)
+    } else if (e.key === 'ArrowLeft') {
+      this.move(-1, 0, e.shiftKey)
+    } else if (e.key === 'Escape') {
+      this.center()
     }
     this.context.fillStyle = cursor.color
   }
@@ -235,7 +261,6 @@ function Noodle () {
     e.preventDefault()
     e.stopPropagation()
     const file = e.dataTransfer.files[0]
-    const filename = file.path ? file.path : file.name ? file.name : ''
     this.draw(file)
   }
 
