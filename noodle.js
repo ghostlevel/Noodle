@@ -204,7 +204,9 @@ function Noodle () {
       this.color('white')
     } else if (e.key === 'Alt') {
       this.set('drag')
-    } else if (e.key === 'Control' || e.key === 'Meta') {
+    } else if (e.key === 'Control') {
+      this.set('line')
+    } else if (e.key === 'Meta') {
       this.set('tone')
     } else if (e.key === '1') {
       this.set('trace')

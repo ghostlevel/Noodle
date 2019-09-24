@@ -24,9 +24,13 @@ We could not find a decent webpage to draw quick line doodles, so here's one.
 - `shift-del` clear all.
 - `arrows` move viewport.
 
-### Specials
+### Alternative Controls  to Sticky Modes
 
-- `right-click` line.
+- `ctrl-click` or `right click` line.
+- `meta-click` tone.
+- `alt-click` drag canvas.
+
+### Specials
 
 - `i` invert.
 - `x` flip.
