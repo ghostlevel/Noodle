@@ -1,6 +1,6 @@
 Personal fork of https://github.com/hundredrabbits/Noodle
 
-Modified for personal use on a Windows TabletPC with Wacom EMR
+Modified for personal use on a Windows TabletPC with Wacom EMR / Samsung S-Pen (only 1 side button)
 
 # Noodle
 
